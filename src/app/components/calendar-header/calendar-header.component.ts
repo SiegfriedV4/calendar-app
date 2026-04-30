@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, computed, output } from '@angular/core';
+import { Router } from '@angular/router';
 import { format } from 'date-fns';
 import { CalendarStore } from '../../store/calendar.store';
 import { CalendarView } from '../../models/calendar-view.model';
@@ -10,9 +11,15 @@ import { CalendarView } from '../../models/calendar-view.model';
 })
 export class CalendarHeaderComponent {
   readonly store  = inject(CalendarStore);
+  readonly router = inject(Router);
   readonly views: CalendarView[] = ['year', 'month', 'week'];
 
   readonly holidaySearchToggled = output<void>();
+
+  goView(v: CalendarView): void {
+    this.store.setView(v);          // immediate highlight update
+    this.router.navigate(['/', v]); // triggers lazy load + URL change
+  }
 
   readonly title = computed(() => {
     const d = this.store.focusedDate();

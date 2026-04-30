@@ -7,9 +7,7 @@
   />
 
   <main class="flex-1 overflow-hidden">
-    @if (store.activeView() === 'year')  { <app-year-view  /> }
-    @if (store.activeView() === 'month') { <app-month-view /> }
-    @if (store.activeView() === 'week')  { <app-week-view  /> }
+    <router-outlet />
   </main>
 
   @if (store.activeModal() === 'event')    { <app-event-modal    /> }

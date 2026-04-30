@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy, inject, effect, untracked, Input, signal } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CalendarStore } from '../../store/calendar.store';
 import { HolidayService } from '../../services/holiday.service';
+import { CalendarView } from '../../models/calendar-view.model';
 import { CalendarHeaderComponent } from '../calendar-header/calendar-header.component';
-import { YearViewComponent } from '../year-view/year-view.component';
-import { MonthViewComponent } from '../month-view/month-view.component';
-import { WeekViewComponent } from '../week-view/week-view.component';
 import { EventModalComponent } from '../event-modal/event-modal.component';
 import { ReminderModalComponent } from '../reminder-modal/reminder-modal.component';
 import { HolidaySearchComponent } from '../holiday-search/holiday-search.component';
@@ -13,10 +14,8 @@ import { HolidaySearchComponent } from '../holiday-search/holiday-search.compone
   selector: 'app-calendar-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    RouterOutlet,
     CalendarHeaderComponent,
-    YearViewComponent,
-    MonthViewComponent,
-    WeekViewComponent,
     EventModalComponent,
     ReminderModalComponent,
     HolidaySearchComponent,
@@ -31,6 +30,17 @@ export class CalendarShellComponent {
   readonly showHolidaySearch = signal(false);
 
   constructor() {
+    const router = inject(Router);
+
+    // Keep store.activeView in sync with the route for header button highlighting
+    router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      takeUntilDestroyed(),
+    ).subscribe(e => {
+      const path = e.urlAfterRedirects.replace('/', '') as CalendarView;
+      if (['year', 'month', 'week'].includes(path)) this.store.setView(path);
+    });
+
     effect(() => {
       const year = this.store.focusedDate().getFullYear();
       untracked(() => {

@@ -12,7 +12,7 @@
         class="cal-btn capitalize text-sm"
         [class.bg-blue-600]="store.activeView() === v"
         [class.text-white]="store.activeView() === v"
-        (click)="store.setView(v)"
+        (click)="goView(v)"
       >{{ v }}</button>
     }
   </div>

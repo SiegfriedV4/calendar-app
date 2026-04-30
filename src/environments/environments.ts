@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  holidayApiKey: 'c0afb654-9b12-4a3a-bb51-a70e5f975e23',
-  holidayApiCountry: 'ZA'  
+  holidayApiKey: import.meta.env['NG_APP_HOLIDAY_API_KEY'] ?? '',
+  holidayApiCountry: 'ZA',
 };

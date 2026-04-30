@@ -1,0 +1,32 @@
+<div class="grid grid-cols-7 flex-1">
+  @for (day of monthDays(); track day.iso) {
+    <div
+      class="border border-neutral-100 p-1 flex flex-col gap-0.5 cursor-pointer
+             hover:bg-blue-50 transition-colors"
+      [class.bg-blue-50]="day.isToday"
+      [class.text-neutral-400]="!day.isCurrentMonth"
+      (click)="onDayClick(day)"
+    >
+      <span class="text-xs font-medium self-start px-1">{{ day.date | formatDate:'d' }}</span>
+
+      @for (event of day.events; track event.id) {
+        <span
+          class="cal-chip text-white truncate cursor-pointer hover:opacity-80"
+          [class]="colorClass(event.color)"
+          (click)="onEventClick(event, $event)"
+        >{{ event.title }}</span>
+      }
+
+      @for (reminder of day.reminders; track reminder.id) {
+        <span
+          class="cal-chip bg-neutral-100 text-neutral-600 border border-dashed truncate cursor-pointer hover:bg-neutral-200"
+          (click)="onReminderClick(reminder, $event)"
+        >🔔 {{ reminder.title }}</span>
+      }
+
+      @if (day.holiday) {
+        <span class="cal-chip bg-amber-100 text-amber-800">{{ day.holiday.name }}</span>
+      }
+    </div>
+  }
+</div>

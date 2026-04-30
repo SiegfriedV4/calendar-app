@@ -13,7 +13,7 @@ export interface CalendarEvent {
   color: EventColor;
   notificationOffset?: NotificationOffset;
   customNotificationMinutes?: number;
-  notificationScheduledAt?: number; // epoch ms for rescheduling on reload for custom notifications
+  notificationScheduledAt?: number; //  custom notifications
   createdAt: string;
   updatedAt: string;
 }

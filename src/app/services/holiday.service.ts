@@ -6,7 +6,7 @@ import { environment } from '../../environments/environments';
 import { Holiday, HolidayApiResponse, HolidayMap } from '../models/holiday.model';
 import { StorageService } from './storage.service';
 
-const CACHE = 24 * 60 * 60 * 1000; // 
+const CACHE = 24 * 60 * 60 * 1000; // 24 h TTL
 
 @Injectable({ providedIn: 'root' })
 export class HolidayService {
@@ -15,7 +15,7 @@ export class HolidayService {
   private apiKey = environment.holidayApiKey;
   private memCache = new Map<string, { data: HolidayMap; ts: number }>();
 
-  fetchHolidays(year: number, country = 'US'): Observable<HolidayMap> {
+  fetchHolidays(year: number, country = 'ZA'): Observable<HolidayMap> {
     const key = `${country}-${year}`;
 
     // 1. Memory cache hit

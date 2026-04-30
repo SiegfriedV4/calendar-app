@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, output } from '@angular/core';
 import { format } from 'date-fns';
 import { CalendarStore } from '../../store/calendar.store';
 import { CalendarView } from '../../models/calendar-view.model';
@@ -11,6 +11,8 @@ import { CalendarView } from '../../models/calendar-view.model';
 export class CalendarHeaderComponent {
   readonly store  = inject(CalendarStore);
   readonly views: CalendarView[] = ['year', 'month', 'week'];
+
+  readonly holidaySearchToggled = output<void>();
 
   readonly title = computed(() => {
     const d = this.store.focusedDate();

@@ -13,6 +13,14 @@ export class CalendarStore {
   readonly calendarReminders = signal<CalendarReminder[]>([]);
   readonly holidays = signal<HolidayMap>({});
 
+  // Theme
+  readonly isDarkMode = signal<boolean>(localStorage.getItem('cal-dark-mode') === 'true');
+
+  toggleDarkMode(): void {
+    this.isDarkMode.update(v => !v);
+    localStorage.setItem('cal-dark-mode', String(this.isDarkMode()));
+  }
+
   // Modal state
   readonly activeModal = signal<'event' | 'reminder' | null>(null);
   readonly itemBeingEdited = signal<CalendarItem | null>(null);

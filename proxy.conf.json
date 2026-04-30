@@ -1,0 +1,8 @@
+{
+  "/holiday-api": {
+    "target": "https://holidayapi.com",
+    "changeOrigin": true,
+    "pathRewrite": { "^/holiday-api": "" },
+    "secure": true
+  }
+}

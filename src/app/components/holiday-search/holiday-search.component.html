@@ -1,0 +1,57 @@
+<div class="fixed inset-0 z-50 flex items-start justify-end bg-black/30"
+     (click)="closed.emit()">
+
+  <div class="bg-white dark:bg-neutral-800 h-full w-80 shadow-2xl flex flex-col"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-700">
+      <h3 class="font-semibold text-sm">Holiday Search</h3>
+      <button (click)="closed.emit()" class="cal-btn-icon">✕</button>
+    </div>
+
+    <!-- Search form -->
+    <form [formGroup]="form" (ngSubmit)="search()"
+          class="p-4 flex flex-col gap-3 border-b border-neutral-200 dark:border-neutral-700">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-neutral-500">Country code (ISO 3166-1 alpha-2)</label>
+        <input formControlName="country"
+               class="border border-neutral-200 rounded-lg px-3 py-2 text-sm uppercase
+                      focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="e.g. ZA · US · GB"
+               maxlength="2" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-neutral-500">Year</label>
+        <input formControlName="year" type="number"
+               class="border border-neutral-200 rounded-lg px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-blue-500"
+               min="2020" max="2030" />
+      </div>
+
+      <button type="submit"
+              class="cal-btn bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              [disabled]="loading() || form.invalid">
+        @if (loading()) { Searching… } @else { Search }
+      </button>
+    </form>
+
+    <!-- Results -->
+    <div class="flex-1 overflow-y-auto p-4">
+      @if (searched() && !loading() && results().length === 0) {
+        <p class="text-sm text-neutral-500">No holidays found.</p>
+      }
+      @for (holiday of results(); track holiday.date + holiday.name) {
+        <div class="flex items-start gap-2 py-2 border-b border-neutral-100 dark:border-neutral-700">
+          <span class="text-xs text-neutral-400 mt-0.5 font-mono w-24 shrink-0">
+            {{ holiday.date }}
+          </span>
+          <span class="text-sm">{{ holiday.name }}</span>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+    <h2 class="text-lg font-semibold mb-4">
+      @if (store.itemBeingEdited()) { Edit Reminder } @else { New Reminder }
+    </h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+      <input formControlName="title"
+             class="border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+             placeholder="Reminder title" />
+
+      <input formControlName="date" type="date"
+             class="border border-neutral-200 rounded-lg px-3 py-2 text-sm" />
+
+      <label class="flex items-center gap-2 text-sm">
+        <input formControlName="allDay" type="checkbox" /> All day
+      </label>
+
+      @if (!form.get('allDay')!.value) {
+        <div class="flex gap-2">
+          <input formControlName="startTime" type="time" class="flex-1 border border-neutral-200 rounded-lg px-3 py-2 text-sm" />
+          <input formControlName="endTime"   type="time" class="flex-1 border border-neutral-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+      }
+
+      <select formControlName="repeat" class="border border-neutral-200 rounded-lg px-3 py-2 text-sm">
+        @for (opt of repeatOptions; track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+
+      <div class="flex justify-between gap-2">
+        @if (store.itemBeingEdited()) {
+          <button type="button" (click)="delete()"
+                  class="cal-btn bg-red-100 text-red-700 hover:bg-red-200">Delete</button>
+        }
+        <div class="flex gap-2 ml-auto">
+          <button type="button" (click)="cancel()"
+                  class="cal-btn bg-neutral-100 text-neutral-700 hover:bg-neutral-200">Cancel</button>
+          <button type="submit"
+                  class="cal-btn bg-blue-600 text-white hover:bg-blue-700">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

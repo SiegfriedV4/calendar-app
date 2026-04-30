@@ -1,0 +1,33 @@
+<header class="flex items-center justify-between px-4 py-2 border-b border-neutral-100 bg-white dark:bg-neutral-900">
+  <div class="flex items-center gap-2">
+    <button (click)="store.navigatePrev()" class="cal-btn-icon">‹</button>
+    <span class="text-base font-semibold w-44 text-center select-none">{{ title() }}</span>
+    <button (click)="store.navigateNext()" class="cal-btn-icon">›</button>
+    <button (click)="goToday()" class="cal-btn text-sm">Today</button>
+  </div>
+
+  <div class="flex gap-1">
+    @for (v of views; track v) {
+      <button
+        class="cal-btn capitalize text-sm"
+        [class.bg-blue-600]="store.activeView() === v"
+        [class.text-white]="store.activeView() === v"
+        (click)="store.setView(v)"
+      >{{ v }}</button>
+    }
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button (click)="holidaySearchToggled.emit()" class="cal-btn-icon" title="Search holidays">🔍</button>
+    <button (click)="store.toggleDarkMode()" class="cal-btn-icon"
+            [title]="store.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+      @if (store.isDarkMode()) { ☀️ } @else { 🌙 }
+    </button>
+    <button (click)="openNewReminder()" class="cal-btn bg-neutral-100 text-neutral-700 hover:bg-neutral-200">
+      + Reminder
+    </button>
+    <button (click)="openNewEvent()" class="cal-btn bg-blue-600 text-white hover:bg-blue-700">
+      + New Event
+    </button>
+  </div>
+</header>

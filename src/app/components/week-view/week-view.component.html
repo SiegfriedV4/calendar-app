@@ -1,0 +1,72 @@
+<div class="flex h-full overflow-hidden">
+
+  <!-- Time gutter is the leftmost column for displaying hours -->
+  <div class="w-14 flex-shrink-0 overflow-hidden">
+    <div class="h-10"></div>
+    @for (hour of HOURS; track hour) {
+      <div class="h-16 flex items-start justify-end pr-2 pt-1">
+        <span class="text-xs text-neutral-400">
+          @if (hour > 0) {
+            {{ hour < 12 ? hour + ' AM' : hour === 12 ? '12 PM' : (hour - 12) + ' PM' }}
+          }
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- Day columns -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Day headers -->
+    <div class="grid grid-cols-7 border-b border-neutral-100 bg-white z-10">
+      @for (day of weekDays(); track day.iso) {
+        <div class="flex flex-col items-center border-l border-neutral-100 pt-1 pb-1 gap-0.5 min-h-10">
+          <span class="text-xs text-neutral-500">{{ day.date | formatDate:'EEE' }}</span>
+          <span
+            class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold"
+            [class.bg-blue-600]="day.isToday"
+            [class.text-white]="day.isToday"
+          >{{ day.date | formatDate:'d' }}</span>
+          @for (reminder of day.reminders; track reminder.id) {
+            <span
+              class="cal-chip w-full bg-neutral-100 text-neutral-600 border border-dashed truncate cursor-pointer hover:bg-neutral-200"
+              (click)="onReminderClick(reminder, $event)"
+            >🔔 {{ reminder.title }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Scrollable grid -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="grid grid-cols-7" style="height: 1536px">
+        @for (day of weekDays(); track day.iso) {
+          <div class="border-l border-neutral-100 relative">
+
+            <!-- Hour slots -->
+            @for (hour of HOURS; track hour) {
+              <div
+                class="h-16 border-t border-neutral-100 cursor-pointer hover:bg-blue-50/30 transition-colors"
+                (click)="onSlotClick(day, hour)"
+              ></div>
+            }
+
+            <!-- Timed events -->
+            @for (event of day.events; track event.id) {
+              @if (event.startTime) {
+                <div
+                  class="absolute left-0.5 right-1 rounded px-1 py-0.5 text-xs overflow-hidden z-10 cursor-pointer hover:opacity-80"
+                  [class]="colorClass(event.color)"
+                  [style.top.%]="getTopPercent(event.startTime)"
+                  [style.height.%]="getHeightPercent(event.startTime, event.endTime ?? event.startTime)"
+                  (click)="onEventClick(event, $event)"
+                >{{ event.title }}</div>
+              }
+            }
+
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div [class]="compact
+  ? 'flex flex-col overflow-hidden rounded-2xl border border-neutral-200 shadow-2xl dark:border-neutral-700'
+  : 'flex flex-col h-screen w-screen overflow-hidden bg-white dark:bg-neutral-900'">
+
+  <app-calendar-header
+    (holidaySearchToggled)="showHolidaySearch.update(v => !v)"
+  />
+
+  <main class="flex-1 overflow-hidden">
+    @if (store.activeView() === 'year')  { <app-year-view  /> }
+    @if (store.activeView() === 'month') { <app-month-view /> }
+    @if (store.activeView() === 'week')  { <app-week-view  /> }
+  </main>
+
+  @if (store.activeModal() === 'event')    { <app-event-modal    /> }
+  @if (store.activeModal() === 'reminder') { <app-reminder-modal /> }
+  @if (showHolidaySearch())                { <app-holiday-search (closed)="showHolidaySearch.set(false)" /> }
+</div>

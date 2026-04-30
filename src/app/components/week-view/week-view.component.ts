@@ -2,11 +2,12 @@ import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/c
 import { startOfWeek, addDays, format, isToday } from 'date-fns';
 import { CalendarStore } from '../../store/calendar.store';
 import { CalendarEvent, CalendarReminder, EventColor } from '../../models/calendar-event.model';
+import { Holiday } from '../../models/holiday.model';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
 
 interface WeekDay {
   date: Date; iso: string; isToday: boolean;
-  events: CalendarEvent[]; reminders: CalendarReminder[];
+  events: CalendarEvent[]; reminders: CalendarReminder[]; holiday: Holiday | null;
 }
 
 const COLOR_CLASSES: Record<EventColor, string> = {
@@ -30,6 +31,7 @@ export class WeekViewComponent {
     const weekStart       = startOfWeek(this.store.focusedDate());
     const eventsByDate    = this.store.eventsByDate();
     const remindersByDate = this.store.remindersByDate();
+    const holidays        = this.store.holidays();
     return Array.from({ length: 7 }, (_, i) => {
       const date = addDays(weekStart, i);
       const iso  = format(date, 'yyyy-MM-dd');
@@ -38,6 +40,7 @@ export class WeekViewComponent {
         isToday:   isToday(date),
         events:    (eventsByDate[iso]    ?? []).filter(e => !e.allDay),
         reminders: remindersByDate[iso]  ?? [],
+        holiday:   holidays[iso]?.[0]   ?? null,
       };
     });
   });

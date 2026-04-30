@@ -11,10 +11,14 @@
         }
         @for (cell of month.days; track cell.iso) {
           <span
-            class="py-0.5 rounded-full"
+            class="py-0.5 rounded-full cursor-pointer transition-colors"
             [class.text-neutral-300]="!cell.isCurrentMonth"
             [class.bg-blue-500]="cell.isToday"
             [class.text-white]="cell.isToday"
+            [class.bg-amber-200]="cell.holiday && cell.isCurrentMonth && !cell.isToday"
+            [class.text-amber-800]="cell.holiday && cell.isCurrentMonth && !cell.isToday"
+            [title]="cell.holiday ?? ''"
+            (click)="onDayClick(cell, $event)"
           >{{ cell.date | formatDate:'d' }}</span>
         }
       </div>

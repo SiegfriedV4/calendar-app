@@ -33,6 +33,9 @@
               (click)="onReminderClick(reminder, $event)"
             >🔔 {{ reminder.title }}</span>
           }
+          @if (day.holiday) {
+            <span class="cal-chip w-full bg-amber-100 text-amber-800 truncate">{{ day.holiday.name }}</span>
+          }
         </div>
       }
     </div>

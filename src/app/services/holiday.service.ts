@@ -32,8 +32,8 @@ export class HolidayService {
     }
 
     // 3. Network fetch
-    const url = `https://holidayapi.com/v1/holidays?key=${this.apiKey}`
-              + `&country=${country}&year=${year}&pretty`;
+    const url = `/holiday-api/v1/holidays?key=${this.apiKey}`
+          + `&country=${country}&year=${year}&pretty`;
     return this.http.get<HolidayApiResponse>(url).pipe(
       map(resp => this.buildMap(resp.holidays)),
       tap(data => {
